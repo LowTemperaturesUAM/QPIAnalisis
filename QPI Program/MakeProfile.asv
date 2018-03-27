@@ -1,0 +1,19 @@
+function [Profile, Momentum] = MakeProfile(Cell, Info, angle, Width)
+
+    NCell = length(Info.Energia);
+    PuntosCol = length(Info.DistanciaFourierColumnas);
+    PuntosFil = length(Info.DistanciaFourierFilas);
+    Profile = zeros(NCell,PuntosFil);
+  
+    
+       
+      Momentum = Info.DistanciaFourierColumnas*cosd(angle) + Info.DistanciaFourierFilas*sind(angle);
+    for i = 1:NCell
+        CellRot = imrotate(Cell{i}, angle, 'crop');
+        figure(81)        
+        Profile(i,:) = mean(CellRot(:,PuntosFil/2-Width:PuntosFil/2+Width,:),2);
+      
+        
+        
+    end
+        

@@ -1,0 +1,107 @@
+%% Script for analyzing deeply QPI
+% Variables needed:
+   %Transformadas
+   %DistanciaFourierColumnas
+   %DistanciaFourierFilas
+   %DistanciaColumnas
+   %DistanciaFilas
+   %Energia
+   %TamanhoRealFilas
+   %TamanhoRealColumnas
+   %ParametroRedFilas
+   %ParametroRedColumnas
+   %MatrizNormalizada
+   %MapasConductancia
+
+   InfoStruct.Energia = Energia;
+   InfoStruct.DistanciaFourierColumnas= DistanciaFourierColumnas;
+   InfoStruct.DistanciaFourierFilas = DistanciaFourierFilas;
+   
+%% Visualize and change contrast or colormap in KSpace
+    VisualizeCell(Transformadas,InfoStruct)
+        fourierImage = gcf;
+ %%  Save things IMPORTANT     
+     
+      TransformadasAnalisis = Transformadas;
+      InfoStruct = fourierImage.UserData;
+      
+      InfoStructAnalisis  = fourierImage.UserData;
+      InfoStructAnalisisCopy    = InfoStructAnalisis;
+%% Cut Matrix as seen in figure
+
+  
+    cut  = [fourierImage.Children(end).XLim, fourierImage.Children(end).YLim];
+   [TransformadasAnalisisCopy, DistFourierColCrop, DistFourierFilCrop] = CropImage(TransformadasAnalisis, cut,...
+       InfoStructAnalisis.DistanciaFourierColumnas,InfoStructAnalisis.DistanciaFourierFilas);
+  
+   InfoStructAnalisisCopy.Energia = Energia;
+   InfoStructAnalisisCopy.DistanciaFourierColumnas = DistFourierColCrop;
+   InfoStructAnalisisCopy.DistanciaFourierFilas = DistFourierFilCrop; 
+   InfoStructAnalisisCopy.Contrast       = InfoStruct.Contrast;
+   InfoStructAnalisisCopy.XLim       = [repmat(DistFourierColCrop(1),[1, length(Energia)]);...
+                                    repmat(DistFourierColCrop(end),[1, length(Energia)])];
+   InfoStructAnalisisCopy .YLim      = [repmat(DistFourierFilCrop(1),[1, length(Energia)]);...
+                                    repmat(DistFourierFilCrop(end),[1, length(Energia)])];                             
+        
+   VisualizeCell(TransformadasAnalisisCopy, InfoStructAnalisisCopy );
+   %% Save things
+     
+      TransformadasAnalisis = TransformadasAnalisisCopy;
+      InfoStructAnalisis   = fourierImage.UserData;
+%% Filters%%%%%%%%%%%%%%%%%%%%%%%
+%% CenterFilter
+Sigma = 3;
+ [TransformadasAnalisisCopy] = GaussianFilter(TransformadasAnalisis, Sigma, InfoStructAnalisis);
+
+ Filter = [2 2];
+ [TransformadasAnalisisCopy] = LowPassFilter(TransformadasAnalisisCopy, Filter, InfoStructAnalisisCopy);
+    VisualizeCell(TransformadasAnalisisCopy, InfoStructAnalisisCopy);
+%% Save things
+
+      TransformadasAnalisis = TransformadasAnalisisCopy  ;
+      InfoStructAnalisis   = fourierImage.UserData;
+    
+    %% Simetrization
+
+TransformadasAnalisisCopy = simetrizarFFT_Automatico(TransformadasAnalisis, 7.2);
+VisualizeCell(TransformadasAnalisisCopy, InfoStructAnalisisCopy);
+%% Save things
+      TransformadasAnalisis = TransformadasAnalisisCopy  ;
+      InfoStructAnalisis   = fourierImage.UserData;
+
+%%  Make Maps Difference
+      
+    [TransformadasAnalisisCopy ,  InfoStructAnalisisCopy] = differenceCell(TransformadasAnalisis, InfoStructAnalisis);
+    VisualizeCell(TransformadasAnalisisCopy, InfoStructAnalisisCopy);
+    %% Save things
+      
+      TransformadasAnalisis = TransformadasAnalisisCopy  ;
+      InfoStructAnalisis   = fourierImage.UserData;
+     
+      
+%% Make Line Profile with angle
+angle = 23;
+width = 2;
+[Profile, Momentum] = MakeProfile(TransformadasAnalisis , InfoStructAnalisis,angle,width);
+
+figure(78)
+imagesc(Momentum, InfoStructAnalisis.Energia, Profile)
+axe = gca;
+set(gca,'YDir','normal')
+axe.FontSize = 20;     
+axe.CLim = InfoStructAnalisis.Contrast(:,1);
+axis square
+
+%% Make Radial Profile
+
+
+%% Save all figures
+
+
+
+
+
+
+
+
+
