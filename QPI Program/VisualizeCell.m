@@ -41,6 +41,9 @@ a.WindowButtonDownFcn = @WindowDown;
 
 %First plot of the images
 imagesc(XVector,YVector, Cell{Cero})
+
+colormap(a.Children, Info.Colormap);
+            
 set(gca,'YDir','normal')
 axe.FontSize = 20;
             if Info.XLim(2,2) == 1 && Info.YLim(2,2)  == 1
@@ -67,7 +70,7 @@ title([num2str(Energia(Cero)) ' mV'])
 
     function PreviousImage(~, ~)
         axe = gca;
-        disp('aa')
+        %disp('aa')
               
         Cero = Cero -1;
         if Cero <1; Cero = 1; end
@@ -80,8 +83,8 @@ title([num2str(Energia(Cero)) ' mV'])
         
         axe.CLim = Info.Contrast(1:2,Cero);
         
-       Info.XLim(1:2,Cero)
-       Info.YLim(1:2,Cero)
+       Info.XLim(1:2,Cero);
+       Info.YLim(1:2,Cero);
         axe.XLim = Info.XLim(1:2,Cero);
         
         axe.YLim = Info.YLim(1:2,Cero);
@@ -174,7 +177,7 @@ title([num2str(Energia(Cero)) ' mV'])
             ParametroRedColumnas = Info.ParametroRedColumnas;
             ParametroRedFilas = Info.ParametroRedFilas ;
             axe.XLim  = [-1/(2*ParametroRedColumnas), 1/(2*ParametroRedColumnas)];
-            axe.YLim  = [-1/(2*ParametroRedColumnas), 1/(2*ParametroRedColumnas)];
+            axe.YLim  = [-1/(2*ParametroRedFilas), 1/(2*ParametroRedFilas)];
             Info.XLim = [repmat(-1/(2*ParametroRedColumnas),[1,length(Energia)]);...
                                    repmat(1/(2*ParametroRedColumnas),[1,length(Energia)])];
             Info.YLim = [repmat(-1/(2*ParametroRedFilas),[1,length(Energia)]);...

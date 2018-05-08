@@ -46,9 +46,8 @@ function [TransformadasSimetrizadas] = simetrizarFFT_Automatico(TransformadasEqu
 % los puntos estén interpolados.
 % Los vectores Tamanho hacen falta para pasar de distancia a píxeles
 
-    [NumeroMapas, NumeroMapas, Columnas] = size(TransformadasEqualizados);
+    [NumeroMapas, Filas, Columnas] = size(TransformadasEqualizados);
 
-    
     TransformadasSimetrizadasAUX = TransformadasEqualizados;  
 
 %   Control sobre el valor del ángulo
@@ -65,24 +64,44 @@ function [TransformadasSimetrizadas] = simetrizarFFT_Automatico(TransformadasEqu
 
 	for IndiceMapa = 1:NumeroMapas  
         
-        MatrizRotadaZoom = TransformadasSimetrizadasAUX{IndiceMapa};
-        MatrizRotadaZoom = imrotate(MatrizRotadaZoom, Angulo, 'crop');
+        if Angulo >= 0;
+        	MatrizRotada = imrotate(TransformadasSimetrizadasAUX{IndiceMapa},Angulo);
+            
+        elseif Angulo <0
+            Angulo = 180 + Angulo;
+        	MatrizRotada = imrotate(TransformadasSimetrizadasAUX{IndiceMapa},Angulo);
+            
+        else
+            display('¡Problemas con la rotación!')
+            
+        end
+
+%   Localizamos el centro de la matriz Rotada para hacer el zoom que nos
+%   interesa guardar, del mismo tamaño en píxeles que la matriz original
+
+        [FilasMatrizRotada, ColumnasMatrizRotada] = size(MatrizRotada);
+        CentroX = ceil(ColumnasMatrizRotada/2);
+        CentroY = ceil(FilasMatrizRotada/2);
+
+        MatrizRotadaZoom = MatrizRotada(CentroY-Filas/2+1:CentroY+Filas/2,CentroX-Columnas/2+1:CentroX+Columnas/2);
+        MatrizSymetrizada = MatrizRotadaZoom;
+  
         
         
         
 %           SIMETRIA HERMANN
 %   Concentra todo en un cuadrante y replica
-% ---------------------------------------------     
-%         XCentro = Columnas/2;
-%         YCentro = Filas/2;
-%         for i = 1:Columnas/2
-%             for j = 1:Filas/2
-%                 MatrizSymetrizada(XCentro+j,YCentro+i) = (1/4)*(MatrizRotadaZoom(XCentro+j,YCentro+i) +MatrizRotadaZoom(XCentro-(j-1),YCentro+i)+MatrizRotadaZoom(XCentro-(j-1),YCentro-(i-1))+MatrizRotadaZoom(XCentro+j,YCentro-(i-1)));
-%                 MatrizSymetrizada(XCentro-(j-1),YCentro+i) = MatrizSymetrizada(XCentro+j,YCentro+i);
-%                 MatrizSymetrizada(XCentro-(j-1),YCentro-(i-1)) = MatrizSymetrizada(XCentro+j,YCentro+i);
-%                 MatrizSymetrizada(XCentro+j,YCentro-(i-1)) = MatrizSymetrizada(XCentro+j,YCentro+i);
-%             end
-%         end
+% % ---------------------------------------------     
+        XCentro = Columnas/2;
+        YCentro = Filas/2;
+        for i = 1:Columnas/2
+            for j = 1:Filas/2
+                MatrizSymetrizada(XCentro+j,YCentro+i) = (1/4)*(MatrizRotadaZoom(XCentro+j,YCentro+i) +MatrizRotadaZoom(XCentro-(j-1),YCentro+i)+MatrizRotadaZoom(XCentro-(j-1),YCentro-(i-1))+MatrizRotadaZoom(XCentro+j,YCentro-(i-1)));
+                MatrizSymetrizada(XCentro-(j-1),YCentro+i) = MatrizSymetrizada(XCentro+j,YCentro+i);
+                MatrizSymetrizada(XCentro-(j-1),YCentro-(i-1)) = MatrizSymetrizada(XCentro+j,YCentro+i);
+                MatrizSymetrizada(XCentro+j,YCentro-(i-1)) = MatrizSymetrizada(XCentro+j,YCentro+i);
+            end
+        end
 % ---------------------------------------------        
 % ---------------------------------------------
 %           SIMETRIA ESPEJANDO
@@ -96,20 +115,31 @@ function [TransformadasSimetrizadas] = simetrizarFFT_Automatico(TransformadasEqu
 %               SIMETRÍA C4
 %   Roto la matriz 4 veces y hago el promedio de las 4
 % ---------------------------------------------        
-        M1 = imrotate(MatrizRotadaZoom,90, 'crop');
-        M2 = imrotate(MatrizRotadaZoom,180, 'crop');
-        M3 = imrotate(MatrizRotadaZoom,270, 'crop');
-        M4 = fliplr( MatrizRotadaZoom);
-    
-        M5 = imrotate( M4, 90, 'crop');
-        M6 = imrotate( M4,180, 'crop');
-        M7 = imrotate(M4, 270,'crop');
-       
-        
-            MatrizSymetrizada = (MatrizRotadaZoom+M1+...
-                        M2+M3+ M4+M5+...
-                        M6+M7)/8;
-        
+%         M1 = imrotate(MatrizRotadaZoom,90);
+%         M2 = imrotate(MatrizRotadaZoom,180);
+%         M3 = imrotate(MatrizRotadaZoom,270);
+%         
+%         for i = 1:Filas
+%             MatrizSymetrizada(i,:) = (MatrizRotadaZoom(i,:)+M1(i,:)+M2(i,:)+M3(i,:))/4;
+%         end
+% ---------------------------------------------
+
+% SIMETRÍA C4 bien
+% Roto la matriz 4 veces y hago el promedio de las 4
+% ---------------------------------------------
+% M1 = imrotate(MatrizRotadaZoom,90);
+% M2 = imrotate(MatrizRotadaZoom,180);
+% M3 = imrotate(MatrizRotadaZoom,270);
+% 
+% ME = flipud(MatrizRotadaZoom);
+% ME1 = imrotate(ME,90);
+% ME2 = imrotate(ME,180);
+% ME3 = imrotate(ME,270);
+% 
+% for i = 1:Filas
+% MatrizSymetrizada(i,:) = (MatrizRotadaZoom(i,:)+M1(i,:)+M2(i,:)+M3(i,:)...
+% +ME(i,:)+ME1(i,:)+ME2(i,:)+ME3(i,:))/8;
+% end
 % ---------------------------------------------
 
 %   Invertimos la matriz antes de sacarla para ponerla en la orientación
