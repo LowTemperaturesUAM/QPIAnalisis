@@ -46,8 +46,13 @@ function [TransformadasSimetrizadas] = simetrizarFFT_Automatico(TransformadasEqu
 % los puntos estén interpolados.
 % Los vectores Tamanho hacen falta para pasar de distancia a píxeles
 
+%Con la antigua definición de cells
     [NumeroMapas, Filas, Columnas] = size(TransformadasEqualizados);
-
+    
+%Con la nueva definición de cells
+%     [~, NumeroMapas] = size(TransformadasEqualizados);
+%     [Filas, Columnas] = size(TransformadasEqualizados{1});
+%----------------------------------------------------------
     TransformadasSimetrizadasAUX = TransformadasEqualizados;  
 
 %   Control sobre el valor del ángulo
@@ -64,7 +69,7 @@ function [TransformadasSimetrizadas] = simetrizarFFT_Automatico(TransformadasEqu
 
 	for IndiceMapa = 1:NumeroMapas  
         
-        if Angulo >= 0;
+        if Angulo >= 0
         	MatrizRotada = imrotate(TransformadasSimetrizadasAUX{IndiceMapa},Angulo);
             
         elseif Angulo <0

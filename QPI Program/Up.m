@@ -39,18 +39,17 @@ ultimoClick = Fig.SelectionType;                                            %Gua
 switch ultimoClick                                                          % Segun que click distintas acciones
     case 'alt'    %Boton Derecho
                 %[ax, In] = chooseAxes(Fig);
-                if In
-                 
 
-                    ax.XLim = ax.UserData.XLimO;                             %Si das a boton derecho te recupera el XLim e YLim Original
-                    ax.YLim = ax.UserData.YLimO;
-                end
                 if Comprobacion
                     Button = 'alt';
                     Movimiento = 1;
                 else
                     Button = 'alt';
                     Movimiento = 0;
+                    if In               
+                    ax.XLim = ax.UserData.XLimO;                             %Si das a boton derecho te recupera el XLim e YLim Original
+                    ax.YLim = ax.UserData.YLimO;
+                    end
                 end
                 
             
@@ -98,6 +97,7 @@ else
  Button = 0;
  Movimiento =0;  
 end
+
 Fig.UserData.Pressing =0;                                                   %Y se vuelve a no pulsar
 
     

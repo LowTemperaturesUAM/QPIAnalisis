@@ -43,8 +43,8 @@ if fig.UserData.Pressing                                                   % Est
        ax.UserData.YLimC =  [min([ax.UserData.Origin(2), ax.UserData.Origin(2) + Size2]), max([ax.UserData.Origin(2), ax.UserData.Origin(2) + Size2])];
                                                                          %Voy guardando un XLimC(urrent) e YLimC(urrent) mientras siga pulsando
        eraseObjects(ax, 'rectangle') ;      
-       drawRectangle(ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2);     %Creo y borro cuadrados
-        ax.UserData.Rectangle =[ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2];
+       rect = drawRectangle(ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2) ;    %Creo y borro cuadrados
+        ax.UserData.Rectangle =[rect.Position];
     end
     
     if ultimoClick(1) == 'e'                                                 %Si has pulsado el boton central ('extend') entra
@@ -66,8 +66,8 @@ if fig.UserData.Pressing                                                   % Est
        ax.UserData.YLimC =  [min([ax.UserData.Origin(2), ax.UserData.Origin(2) + Size2]), max([ax.UserData.Origin(2), ax.UserData.Origin(2) + Size2])];
                                                                          %Voy guardando un XLimC(urrent) e YLimC(urrent) mientras siga pulsando
        eraseObjects(ax, 'rectangle') ;      
-       drawRectangle(ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2);     %Creo y borro cuadrados
-        ax.UserData.Rectangle =[ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2];
+       rect = drawRectangle(ax.UserData.Origin(1),ax.UserData.Origin(2), Size,  Size2);     %Creo y borro cuadrados
+        ax.UserData.Rectangle =[rect.Position];
     end
     
     

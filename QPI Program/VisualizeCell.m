@@ -1,5 +1,5 @@
 function  [Info] = VisualizeCell(Cell,Info)
-
+3
 %Every matrix in the cell is of the same size but not squared. If only XVector is given,
 %an squared matrix is supposed with YVector equals to XVector
 Energia = Info.Energia;
@@ -10,6 +10,7 @@ NumberOfImages = length(Energia);
 
 Cero           = find(Energia == 0);
 a = figure(23);
+a.Name = 'mainFig';
 
 axe = gca;
 
@@ -60,7 +61,9 @@ axe.FontSize = 20;
             end
              
      axe.CLim = Info.Contrast(:,Cero);
-     Info.Colormap = a.Colormap ;                          
+      
+      a.Colormap =  Info.Colormap ;    
+     
 pbaspect([1 (axe.YLim(end) - axe.YLim(1)) /(axe.XLim(end) - axe.XLim(1)) 1])
 title([num2str(Energia(Cero)) ' mV'])
 
@@ -88,6 +91,7 @@ title([num2str(Energia(Cero)) ' mV'])
         axe.XLim = Info.XLim(1:2,Cero);
         
         axe.YLim = Info.YLim(1:2,Cero);
+         a.Colormap  = Info.Colormap   ;  
         if axe.CLim(2) ==1
              axe.CLim = Info.Contrast(1:2,Cero+1);
              
@@ -107,16 +111,20 @@ title([num2str(Energia(Cero)) ' mV'])
         
     end
     function NextImage(~, ~)
+        
          axe = gca;
          
         Cero = Cero +1;
         if Cero >length(Energia); Cero = length(Energia); end
          
         
-        
+        a.Colormap  = Info.Colormap   ;
         imagesc(XVector,YVector, Cell{Cero})
         
         set(gca,'YDir','normal')
+    
+        
+
         axe.FontSize = 20;
         
         axe.CLim = Info.Contrast(1:2,Cero);
@@ -207,10 +215,23 @@ title([num2str(Energia(Cero)) ' mV'])
             
              
         end
+        
+        if strcmp(event.Key, '0')
+            axe.ColorOrderIndex = 1;
+            num = length(axe.Children);
+            j=0;
+            for i=1:num
+                 if strcmp(axe.Children(i).Type,'rectangle') | strcmp(axe.Children(i).Type,'line')
+                     j = j+1;
+                     borra(j) = i;
+                 end         
+            end
+                delete(axe.Children(borra))
+        end
         pbaspect([1 (axe.YLim(end) - axe.YLim(1)) /(axe.XLim(end) - axe.XLim(1)) 1])
     end   
     function WindowUp(~, ~)
-        [~, ~, ~] = Up();
+        [~, button, movimiento] = Up();
         
         axe = gca;
         Info.XLim = [repmat(axe.XLim(1),[1,length(Energia)]);...
@@ -218,6 +239,26 @@ title([num2str(Energia(Cero)) ' mV'])
         Info.YLim = [repmat(axe.YLim(1),[1,length(Energia)]);...
                                    repmat(axe.YLim(2),[1,length(Energia)])];
         pbaspect([1 (axe.YLim(end) - axe.YLim(1)) /(axe.XLim(end) - axe.XLim(1)) 1])
+       
+        if strcmp(button, 'alt') && movimiento >0
+%             Coordinates = axe.UserData.Rectangle
+%             
+%             Coordinates = [Coordinates(1:2), Coordinates(1:2) + Coordinates(3:4)];
+%             Coordinates = (Coordinates - Info.DistanciaFourierFilas(1) )./...
+%             (abs(Info.DistanciaFourierFilas(1)) + Info.DistanciaFourierFilas(end));
+%             
+%             Index = round(Coordinates.*length(Info.DistanciaFourierFilas));
+           Rectangulo = axe.UserData.Rectangle;
+        
+        MeanIVFunction(Rectangulo, Info.MatrizNormalizada, Info.Voltaje, length(Info.DistanciaFourierColumnas),...
+            length(Info.DistanciaFourierColumnas), Info.DistanciaFourierColumnas,Info);
+       
+        end
+        
+        if strcmp(button,'open')
+            %Puntero = axe.CurrentPoint;
+            curvaUnicaPA(axe.CurrentPoint,Info.MapasConductancia{1},Info.Voltaje,Info.MatrizNormalizada, Info.DistanciaFourierFilas,Info.DistanciaFourierColumnas,0)
+        end
     end
     function WindowMotion(~, ~)
         CurrentPoint()
