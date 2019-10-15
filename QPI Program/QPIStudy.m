@@ -40,7 +40,7 @@ InfoStruct = RecorteQPI(x1,x2,y1,y2,InfoStructOriginal);
         fourierImage.UserData.Colormap = InfoStruct.Colormap;
 %% Curva Conductancia Media
    curva = meanConductance(InfoStruct);
-
+% meanConductance(InfoStruct);
    %% 
     for k=1:length(InfoStruct.Energia)
         InfoStruct.Transformadas{k}=InfoStruct.Transformadas{k}*1e6;

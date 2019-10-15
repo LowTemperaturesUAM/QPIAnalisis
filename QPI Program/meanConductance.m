@@ -16,7 +16,7 @@ for k=1:PuntosIV
     curvaCorriente(k,2) = mean(mean(Matriz3DCorriente(:,:,k)));
 end
 
-curva = curva*1e3;%para que esté en [nS]
+curva(:,2) = curva(:,2)*1e3;%para que esté en [nS]
 
 %Plot current
 figure (8983)
@@ -56,4 +56,7 @@ b.XColor = [0 0 0];
 b.YColor = [0 0 0];
 b.XLabel.String = 'Energy (meV)';
 b.YLabel.String = 'Conductance (nS)';
+
+assignin('base','curvaCorriente',curvaCorriente);
+assignin('base','curvaConductancia',curva);
 end
