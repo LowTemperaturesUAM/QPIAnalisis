@@ -56,6 +56,8 @@ color = winter(length(PixelXinicioFinal));
     (PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i)
     size(MatrizNormalizada)
     ConductanciaCurvaUnica = MatrizNormalizada(:,(PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i));
+    
+    ConductanciaCurvaUnica = ConductanciaCurvaUnica*1e3; %Conductancia en nS
 %     ConductanciaCurvaUnica = smooth(MatrizNormalizada(:,(PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i)));
 
 
@@ -71,7 +73,7 @@ for i=1:length(PixelXinicioFinal)
                 'FontSize',16);
             xlim([min(Voltaje),max(Voltaje)]);
         
-        ylabel('Conductance (\muS)',...
+        ylabel('Conductance (nS)',...
                 'FontSize',16);
 %             ylim([0 ,2]);
     

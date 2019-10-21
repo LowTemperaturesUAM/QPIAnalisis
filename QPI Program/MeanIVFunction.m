@@ -22,6 +22,9 @@ if length(Coordenadas)>1
 for i = 1:length(Coordenadas)
         mean = mean + MatrizNormalizada(:,Coordenadas(i))/length(Coordenadas);
 end
+
+mean  = mean*1e3; %Paso conductancia a nS
+
 %assignin('base','mean',[Voltaje, mean])
 b=findobj('Name', 'mainFig');
 meanIVFig = figure(23321);
@@ -35,7 +38,7 @@ a.ColorOrderIndex = b.Children.ColorOrderIndex;
 plot(Voltaje(1+Info.PuntosDerivada:length(Info.Voltaje)-Info.PuntosDerivada), mean(1+Info.PuntosDerivada:length(Info.Voltaje)-Info.PuntosDerivada),'-','LineWidth',2)
 
 a.XLabel.String = 'Energy (meV)';
-a.YLabel.String = 'Conductance (\muS)';
+a.YLabel.String = 'Conductance (nS)';
 % a.Children.LineWidth = 2;
 % a.Children.Color = [0 0 0];
 a.FontWeight = 'bold';
