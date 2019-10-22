@@ -1,6 +1,6 @@
 
 
-function [  ] = curvaUnicaPA(puntero,ConductanceMap, Voltaje,MatrizNormalizada, VectorTamanhoX,VectorTamanhoY, flag)
+function [Voltaje, ConductanciaCurvaUnica] = curvaUnicaPA(puntero,ConductanceMap, Voltaje,MatrizNormalizada, VectorTamanhoX,VectorTamanhoY, flag)
 %Programa que te printa las curvas elegidas con el puntero
 
 

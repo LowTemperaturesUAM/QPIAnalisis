@@ -257,8 +257,10 @@ title([num2str(Energia(Cero)) ' mV'])
         
         if strcmp(button,'open')
             %Puntero = axe.CurrentPoint;
-            curvaUnicaPA(axe.CurrentPoint,Info.MapasConductancia{1},Info.Voltaje,Info.MatrizNormalizada, Info.DistanciaFourierFilas,Info.DistanciaFourierColumnas,0)
+            [Bias, ConductanciaCurvaUnica] = curvaUnicaPA(axe.CurrentPoint,Info.MapasConductancia{1},Info.Voltaje,Info.MatrizNormalizada, Info.DistanciaFourierFilas,Info.DistanciaFourierColumnas,0)
         end
+        assignin('base','Voltaje',Bias);
+        assignin('base','ConductanciaCurvaUnica',ConductanciaCurvaUnica);
     end
     function WindowMotion(~, ~)
         CurrentPoint()
