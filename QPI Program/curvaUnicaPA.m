@@ -53,8 +53,8 @@ color = winter(length(PixelXinicioFinal));
 
 %Paso los valores directamente a vectores para que sea mas facil de
 %entender:
-    (PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i)
-    size(MatrizNormalizada)
+%     (PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i)
+%     size(MatrizNormalizada)
     ConductanciaCurvaUnica = MatrizNormalizada(:,(PixelYinicioFinal(i)-1)*Columnas+PixelXinicioFinal(i));
     
     ConductanciaCurvaUnica = ConductanciaCurvaUnica*1e3; %Conductancia en nS

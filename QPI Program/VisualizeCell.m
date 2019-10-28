@@ -1,5 +1,5 @@
-function  [Info] = VisualizeCell(Cell,Info)
-3
+function  VisualizeCell(Cell,Info)
+
 %Every matrix in the cell is of the same size but not squared. If only XVector is given,
 %an squared matrix is supposed with YVector equals to XVector
 Energia = Info.Energia;
@@ -257,10 +257,11 @@ title([num2str(Energia(Cero)) ' mV'])
         
         if strcmp(button,'open')
             %Puntero = axe.CurrentPoint;
-            [Bias, ConductanciaCurvaUnica] = curvaUnicaPA(axe.CurrentPoint,Info.MapasConductancia{1},Info.Voltaje,Info.MatrizNormalizada, Info.DistanciaFourierFilas,Info.DistanciaFourierColumnas,0)
+            [Bias, ConductanciaCurvaUnica] = curvaUnicaPA(axe.CurrentPoint,Info.MapasConductancia{1},Info.Voltaje,Info.MatrizNormalizada, Info.DistanciaFourierFilas,Info.DistanciaFourierColumnas,0);
+            assignin('base','Voltaje',Bias);
+            assignin('base','ConductanciaCurvaUnica',ConductanciaCurvaUnica);
         end
-        assignin('base','Voltaje',Bias);
-        assignin('base','ConductanciaCurvaUnica',ConductanciaCurvaUnica);
+        
     end
     function WindowMotion(~, ~)
         CurrentPoint()

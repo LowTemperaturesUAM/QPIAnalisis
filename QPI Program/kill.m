@@ -10,7 +10,7 @@ Fig2Close = a.Name;
                 j=0;
                 for i=1:num
                      if strcmp(axe.Children(i).Tag,Fig2Close)
-                         j = j+1
+                         j = j+1;
                         borra(j) = i;
                      end         
                 end
@@ -19,6 +19,7 @@ Fig2Close = a.Name;
                     delete(a)
     else
         delete(a)
+    end
 
 end
         
